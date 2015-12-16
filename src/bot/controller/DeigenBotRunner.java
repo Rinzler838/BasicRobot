@@ -1,11 +1,11 @@
 package bot.controller;
+
 /**
  * @author dvil4688
- * @version
+ * @version 1.0 12/16/15
  */
 public class DeigenBotRunner
 {
-
 	public static void main(String[] args)
 	{
 		BotController myBotController = new BotController();
