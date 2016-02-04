@@ -30,7 +30,7 @@ public class BotController
 	{
 		LCD.drawString(message, xPosition, yPosition);
 		Delay.msDelay(waitTime);
-		simpleBot.driveRoom();
+		//simpleBot.driveRoom();
 	}
 	
 	public String getMessage()
