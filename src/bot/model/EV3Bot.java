@@ -1,4 +1,5 @@
 package bot.model;
+
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.Motor;
@@ -20,6 +21,8 @@ public class EV3Bot
 	private MovePilot botPilot;
 	private EV3UltrasonicSensor distanceSensor;
 	private EV3TouchSensor backTouch;
+	private float [] ultrasonicSamples;
+	private float [] touchSamplples;
 	
 	public EV3Bot()
 	{
@@ -45,6 +48,35 @@ public class EV3Bot
 	
 	private void driveRoom()
 	{
+		ultrasonicSamples = new float [distanceSensor.sampleSize()];
+		distanceSensor.fetchSample(ultrasonicSamples, 0);
+		if (ultrasonicSamples[0] < 18)
+		{
+			//Short
+			botPilot.travel(7.62);
+			botPilot.rotate(-90);
+			botPilot.travel(30.48);
+			botPilot.rotate(90);
+			botPilot.travel(58.42);
+			botPilot.rotate(-90);
+			botPilot.travel(43.18);
+			botPilot.stop();
+		}
+		else
+		{
+			//Long
+			botPilot.travel(43.18);
+			botPilot.rotate(90);
+			botPilot.travel(58.42);
+			botPilot.rotate(-90);
+			botPilot.travel(30.48);
+			botPilot.rotate(90);
+			botPilot.travel(7.62);
+			botPilot.rotate(360);
+			botPilot.rotate(-360);
+			botPilot.stop();
+		}
+		
 		displayMessage("driveRoom");
 	}
 	
