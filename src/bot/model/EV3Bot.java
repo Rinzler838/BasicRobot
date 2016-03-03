@@ -41,7 +41,7 @@ public class EV3Bot
 	private void setupPilot()
 	{
 		Wheel leftWheel = WheeledChassis.modelWheel(Motor.A,  43.3).offset(-72);
-		Wheel rightWheel = WheeledChassis.modelWheel(Motor.B, 43.3).offset(-72);
+		Wheel rightWheel = WheeledChassis.modelWheel(Motor.B, 43.3).offset(72);
 		WheeledChassis chassis = new WheeledChassis(new Wheel []{leftWheel, rightWheel}, WheeledChassis.TYPE_DIFFERENTIAL);
 		botPilot = new MovePilot(chassis);
 	}
@@ -52,32 +52,40 @@ public class EV3Bot
 		distanceSensor.fetchSample(ultrasonicSamples, 0);
 		if (ultrasonicSamples[0] < 18)
 		{
-			//Short
-			botPilot.travel(7.62);
-			botPilot.rotate(-90);
-			botPilot.travel(30.48);
-			botPilot.rotate(90);
-			botPilot.travel(58.42);
-			botPilot.rotate(-90);
-			botPilot.travel(43.18);
-			botPilot.stop();
+			displayMessage("Short Begin");
+			shorterBegin();
 		}
 		else
 		{
-			//Long
-			botPilot.travel(43.18);
-			botPilot.rotate(90);
-			botPilot.travel(58.42);
-			botPilot.rotate(-90);
-			botPilot.travel(30.48);
-			botPilot.rotate(90);
-			botPilot.travel(7.62);
-			botPilot.rotate(360);
-			botPilot.rotate(-360);
-			botPilot.stop();
+			displayMessage("Long Begin");
+			longerBegin();
 		}
 		
 		displayMessage("driveRoom");
+	}
+	
+	private void shorterBegin()
+	{
+		botPilot.travel(914.4);
+		botPilot.rotate(-90);
+		botPilot.travel(3657.6);
+		botPilot.rotate(90);
+		botPilot.travel(7010.4);
+		botPilot.rotate(-90);
+		botPilot.travel(5181.6);
+		botPilot.stop();
+	}
+	
+	private void longerBegin()
+	{
+		botPilot.travel(5181.6);
+		botPilot.rotate(90);
+		botPilot.travel(7010.4);
+		botPilot.rotate(-90);
+		botPilot.travel(3657.6);
+		botPilot.rotate(90);
+		botPilot.travel(914.4);
+		botPilot.stop();
 	}
 	
 	private void displayMessage()
