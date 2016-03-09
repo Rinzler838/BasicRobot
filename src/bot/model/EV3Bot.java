@@ -1,4 +1,4 @@
-package bot.model;
+ package bot.model;
 
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
@@ -46,46 +46,88 @@ public class EV3Bot
 		botPilot = new MovePilot(chassis);
 	}
 	
-	private void driveRoom()
+	public void driveRoom()
 	{
-		ultrasonicSamples = new float [distanceSensor.sampleSize()];
-		distanceSensor.fetchSample(ultrasonicSamples, 0);
-		if (ultrasonicSamples[0] < 18)
+		while (LocalEV3.get().getKeys().waitForAnyPress() != LocalEV3.get().getKeys().ID_ESCAPE)
 		{
-			displayMessage("Short Begin");
 			shorterBegin();
 		}
-		else
-		{
-			displayMessage("Long Begin");
-			longerBegin();
-		}
 		
-		displayMessage("driveRoom");
+//		ultrasonicSamples = new float [distanceSensor.sampleSize()];
+//		distanceSensor.fetchSample(ultrasonicSamples, 0);
+//		if (ultrasonicSamples[0] < 3)
+//		{
+//			displayMessage("Short Begin");
+//			shorterBegin();
+//		}
+//		else
+//		{
+//			displayMessage("Long Begin");
+//			longerBegin();
+//		}
+//		
+//		displayMessage("driveRoom");
 	}
 	
 	private void shorterBegin()
 	{
-		botPilot.travel(914.4);
-		botPilot.rotate(-90);
-		botPilot.travel(3657.6);
-		botPilot.rotate(90);
-		botPilot.travel(7010.4);
-		botPilot.rotate(-90);
-		botPilot.travel(5181.6);
+		botPilot.travel(914.4); //From door
+		botPilot.rotate(50);
+		botPilot.travel(3657.6); //Along front of room
+		botPilot.rotate(-60);
+		botPilot.travel(6010.4); //Long straight 7010.4?
+		botPilot.rotate(60);
+		botPilot.travel(5181.6); //To other door
 		botPilot.stop();
 	}
 	
 	private void longerBegin()
 	{
-		botPilot.travel(5181.6);
-		botPilot.rotate(90);
-		botPilot.travel(7010.4);
-		botPilot.rotate(-90);
-		botPilot.travel(3657.6);
-		botPilot.rotate(90);
-		botPilot.travel(914.4);
+		botPilot.travel(5181.6); //From door
+		botPilot.rotate(-60);
+		botPilot.travel(7010.4); //Long straight
+		botPilot.rotate(60);
+		botPilot.travel(3657.6); //Along front of room
+		botPilot.rotate(-50);
+		botPilot.travel(914.4); //To other door
 		botPilot.stop();
+	}
+	
+	public void avoidanceMethod()
+	{
+		while (LocalEV3.get().getKeys().waitForAnyPress() != LocalEV3.get().getKeys().ID_ESCAPE)
+		{
+			double distance = (Math.random() * 100) % 23;
+			double angle = (Math.random() * 360);
+			boolean isPositive = ((int) (Math.random() * 2) % 2 == 0);
+			distanceSensor.fetchSample(ultrasonicSamples, 0);
+			
+			if(ultrasonicSamples[0] < 17)
+			{
+				botPilot.travel(-distance);
+				botPilot.rotate(angle);
+			}
+			else
+			{
+				botPilot.rotate(-angle);
+				botPilot.travel(distance);
+			}
+		}
+
+		//OR
+		
+		while (LocalEV3.get().getKeys().waitForAnyPress() != LocalEV3.get().getKeys().ID_ESCAPE)
+		{
+			distanceSensor.fetchSample(ultrasonicSamples, 0);
+			while (ultrasonicSamples[0] < 1)
+			{
+				botPilot.travel(5);
+			}
+			botPilot.stop();
+			botPilot.rotate(90);
+			botPilot.travel(5);
+		}
+		
 	}
 	
 	private void displayMessage()

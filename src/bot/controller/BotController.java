@@ -6,7 +6,7 @@ import bot.model.EV3Bot;
 
 /**
  * @author dvil4688
- * @version 1.0 12/16/15
+ * @version 1.1 3/9/16 driveRoom()
  */
 public class BotController
 {
@@ -30,7 +30,7 @@ public class BotController
 	{
 		LCD.drawString(message, xPosition, yPosition);
 		Delay.msDelay(waitTime);
-		//simpleBot.driveRoom();
+		simpleBot.driveRoom();
 	}
 	
 	public String getMessage()
