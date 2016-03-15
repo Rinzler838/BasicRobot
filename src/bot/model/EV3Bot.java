@@ -1,9 +1,12 @@
  package bot.model;
 
+import java.io.*;
+
 import lejos.hardware.ev3.LocalEV3;
 import lejos.hardware.lcd.LCD;
 import lejos.hardware.motor.Motor;
 import lejos.hardware.port.Port;
+import lejos.hardware.Sound;
 import lejos.robotics.chassis.Wheel;
 import lejos.robotics.chassis.WheeledChassis;
 import lejos.robotics.navigation.MovePilot;
@@ -95,24 +98,24 @@ public class EV3Bot
 	
 	public void avoidanceMethod()
 	{
-		while (LocalEV3.get().getKeys().waitForAnyPress() != LocalEV3.get().getKeys().ID_ESCAPE)
-		{
-			double distance = (Math.random() * 100) % 23;
-			double angle = (Math.random() * 360);
-			boolean isPositive = ((int) (Math.random() * 2) % 2 == 0);
-			distanceSensor.fetchSample(ultrasonicSamples, 0);
-			
-			if(ultrasonicSamples[0] < 17)
-			{
-				botPilot.travel(-distance);
-				botPilot.rotate(angle);
-			}
-			else
-			{
-				botPilot.rotate(-angle);
-				botPilot.travel(distance);
-			}
-		}
+//		while (LocalEV3.get().getKeys().waitForAnyPress() != LocalEV3.get().getKeys().ID_ESCAPE)
+//		{
+//			double distance = (Math.random() * 100) % 23;
+//			double angle = (Math.random() * 360);
+//			boolean isPositive = ((int) (Math.random() * 2) % 2 == 0);
+//			distanceSensor.fetchSample(ultrasonicSamples, 0);
+//			
+//			if(ultrasonicSamples[0] < 17)
+//			{
+//				botPilot.travel(-distance);
+//				botPilot.rotate(angle);
+//			}
+//			else
+//			{
+//				botPilot.rotate(-angle);
+//				botPilot.travel(distance);
+//			}
+//		}
 
 		//OR
 		
@@ -128,6 +131,13 @@ public class EV3Bot
 			botPilot.travel(5);
 		}
 		
+	}
+	
+	public void playMusic()
+	{
+		final File soundFile = new File("imperial.wav");
+        Sound.playSample(soundFile, 100);
+        Delay.msDelay(4000);
 	}
 	
 	private void displayMessage()
